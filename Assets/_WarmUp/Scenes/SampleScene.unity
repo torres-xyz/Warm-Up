@@ -4512,6 +4512,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5361264699411546706}
+  - component: {fileID: 5361264699411546707}
   m_Layer: 0
   m_Name: Character-Soldier
   m_TagString: Untagged
@@ -4558,6 +4559,19 @@ Transform:
   - {fileID: 8106201796264249798}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5361264699411546707
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4696367630958991592}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26602eb0ccc182ad38d2f0c5576da7bc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  movementSpeed: 10
 --- !u!1001 &5394296571356081095
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4919,9 +4933,9 @@ SceneRoots:
   - {fileID: 409195886217464220}
   - {fileID: 3848307161297827373}
   - {fileID: 1648577056936804687}
-  - {fileID: 5361264699411546706}
   - {fileID: 1295922424}
   - {fileID: 5414961497174830842}
   - {fileID: 886576379}
   - {fileID: 3965462982344918477}
   - {fileID: 2895322077715412317}
+  - {fileID: 5361264699411546706}
