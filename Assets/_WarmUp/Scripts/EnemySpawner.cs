@@ -1,9 +1,12 @@
+using System;
 using UnityEngine;
 
 public class EnemySpawner : MonoBehaviour
 {
     //TODO: Object Pooling
     //TODO: Randomize Enemy types or have them in a predictable list that we show the player.
+
+    public static event EventHandler<Enemy> EnemySpawned;
 
     [SerializeField] private Enemy enemyPrefab;
     [SerializeField] private int ticksBetweenSpawns;
@@ -29,5 +32,6 @@ public class EnemySpawner : MonoBehaviour
     {
         Enemy newEnemy = Instantiate(enemyPrefab);
         newEnemy.transform.position = spawnLocation.position;
+        EnemySpawned?.Invoke(this, newEnemy);
     }
 }

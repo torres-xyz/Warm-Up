@@ -4,33 +4,42 @@ using UnityEngine.AI;
 
 public class Enemy : MonoBehaviour
 {
-    public static EventHandler EnemyKilled;
+    public event EventHandler<int> HealthChanged;
+    public event EventHandler<Vector3> PositionChanged;
+    public event EventHandler EnemyKilled;
+
+
     public int AttackDamage { get => attackDamage; private set => attackDamage = value; }
-    public int Life { get => life; private set => life = value; }
+    public int Health { get => health; private set => ChangeHealth(value); }
+    private int health;
 
     [SerializeField] private int attackDamage;
-    [SerializeField] private int life;
+    [SerializeField] private int speed;
 
     private NavMeshAgent navMeshAgent;
     private PlayerController player;
+    private int maxHealth = 100;
 
     private void Start()
     {
         navMeshAgent = GetComponent<NavMeshAgent>();
         player = FindObjectOfType<PlayerController>(); //TODO: Error handling on this.
+        navMeshAgent.speed = speed;
 
+        Health = maxHealth;
     }
 
     private void Update()
     {
         navMeshAgent.SetDestination(player.transform.position);
         transform.LookAt(navMeshAgent.steeringTarget);
+        PositionChanged?.Invoke(this, transform.position);
     }
 
     public void TakeDamage(int damageReceived)
     {
-        Life -= damageReceived;
-        if (Life <= 0)
+        Health -= damageReceived;
+        if (Health <= 0)
         {
             Death();
         }
@@ -40,5 +49,11 @@ public class Enemy : MonoBehaviour
     {
         EnemyKilled?.Invoke(this, EventArgs.Empty);
         Destroy(gameObject);
+    }
+
+    private void ChangeHealth(int value)
+    {
+        health = value;
+        HealthChanged?.Invoke(this, health);
     }
 }

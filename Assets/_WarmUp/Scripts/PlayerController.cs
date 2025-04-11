@@ -10,6 +10,7 @@ public class PlayerController : MonoBehaviour
     public static event EventHandler<int> HealthChanged;
 
     [SerializeField] private float movementSpeed;
+    [SerializeField] private int attackDamage;
     private NavMeshAgent navMeshAgent;
 
     private Camera mainCam;
@@ -22,7 +23,6 @@ public class PlayerController : MonoBehaviour
     private int maxHealth = 100;
     private int playerHealth;
 
-    int attackDamage;
 
     float timeSinceLastTick;
     bool justTicked;
