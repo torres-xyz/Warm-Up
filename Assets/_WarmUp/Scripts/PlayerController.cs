@@ -63,10 +63,6 @@ public class PlayerController : MonoBehaviour
             {
                 ReceiveHealing();
             }
-
-
-
-            Debug.Log($"Collider hit = {hitCollider.gameObject.name}");
         }
     }
 
