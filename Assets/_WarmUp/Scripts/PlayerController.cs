@@ -33,9 +33,6 @@ public class PlayerController : MonoBehaviour
 
     SphereCollider sphereCollider;
 
-
-
-
     void Start()
     {
         mainCam = Camera.main;
