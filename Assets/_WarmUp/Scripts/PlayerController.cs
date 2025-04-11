@@ -10,6 +10,7 @@ public class PlayerController : MonoBehaviour
     public static event EventHandler<int> HealthChanged;
     public static event EventHandler<int> AttackDamageChanged;
     public static event EventHandler<int> MoneyChanged;
+    public static event EventHandler PlayerDied;
 
     [SerializeField] private float movementSpeed;
     [SerializeField] private int startingAttackDamage = 20;
@@ -47,7 +48,6 @@ public class PlayerController : MonoBehaviour
         AttackDamage = startingAttackDamage;
 
         GameManager.TimeTicked += GameManager_OnTimeTicked;
-
         StoreItem.AttackDamageIncreasedByStoreItem += StoreItem_OnAttackDamageIncreasedByStoreItem;
     }
 
@@ -111,13 +111,13 @@ public class PlayerController : MonoBehaviour
         if (Health <= 0)
         {
             Health = 0;
-            PlayerDied();
+            HandlePlayerDeath();
         }
     }
 
-    private void PlayerDied()
+    private void HandlePlayerDeath()
     {
-        Debug.Log($"Player Died");
+        PlayerDied?.Invoke(this, EventArgs.Empty);
     }
 
     public void SubtractMoney(int amount)
@@ -174,6 +174,12 @@ public class PlayerController : MonoBehaviour
         return results.Count > 0;
     }
 
+    private void OnDestroy()
+    {
+        GameManager.TimeTicked -= GameManager_OnTimeTicked;
+        StoreItem.AttackDamageIncreasedByStoreItem -= StoreItem_OnAttackDamageIncreasedByStoreItem;
+    }
+
     #region Setters
     private void SetHealth(int value)
     {
@@ -198,4 +204,5 @@ public class PlayerController : MonoBehaviour
         AttackDamage += e;
     }
     #endregion
+
 }

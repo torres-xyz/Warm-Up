@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -18,12 +19,12 @@ public class EnemyFloatingHealthBar : MonoBehaviour
         enemyToFollow = enemy;
         enemyToFollow.HealthChanged += Enemy_OnHealthChanged;
         enemyToFollow.PositionChanged += Enemy_OnPositionChanged;
-        enemyToFollow.EnemyKilled += Enemy_OnEnemyKilled;
+        enemyToFollow.WasKilled += Enemy_OnEnemyKilled;
 
         slider.enabled = true;
     }
 
-    private void Enemy_OnEnemyKilled(object sender, System.EventArgs e)
+    private void Enemy_OnEnemyKilled(object sender, EventArgs e)
     {
         Destroy(gameObject);
     }
@@ -42,6 +43,6 @@ public class EnemyFloatingHealthBar : MonoBehaviour
     {
         enemyToFollow.HealthChanged -= Enemy_OnHealthChanged;
         enemyToFollow.PositionChanged -= Enemy_OnPositionChanged;
-        enemyToFollow.EnemyKilled -= Enemy_OnEnemyKilled;
+        enemyToFollow.WasKilled -= Enemy_OnEnemyKilled;
     }
 }

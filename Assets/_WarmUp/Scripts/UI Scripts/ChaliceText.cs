@@ -5,7 +5,7 @@ public class ChaliceText : MonoBehaviour
 {
     TMP_Text text;
 
-    void Start()
+    void Awake()
     {
         text = GetComponent<TMP_Text>();
         GameManager.ChaliceRewardChanged += GameManager_OnChaliceRewardChanged;
@@ -14,5 +14,9 @@ public class ChaliceText : MonoBehaviour
     private void GameManager_OnChaliceRewardChanged(object sender, int chaliceReward)
     {
         text.text = chaliceReward.ToString();
+    }
+    private void OnDestroy()
+    {
+        GameManager.ChaliceRewardChanged -= GameManager_OnChaliceRewardChanged;
     }
 }

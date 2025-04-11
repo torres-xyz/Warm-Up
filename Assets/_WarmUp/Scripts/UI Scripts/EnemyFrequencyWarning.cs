@@ -1,40 +1,52 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class EnemyFrequencyWarning : MonoBehaviour
 {
     const string WARNING_MESSAGE = "More enemies incoming!";
     [SerializeField] private float messageSpeed;
-    [SerializeField] private float initialPosition;
-    [SerializeField] private float outOfScreenThreshold;
+    [SerializeField] private TMP_Text text;
+    [SerializeField] private Image panelImage;
 
-    TMP_Text text;
+    private float outOfScreenThreshold;
 
-    void Start()
+
+    void Awake()
     {
         EnemySpawner.SpawnFrequencyChanged += EnemySpawner_OnSpawnFrequencyChanged;
-        text = GetComponent<TMP_Text>();
+
+        outOfScreenThreshold = -text.rectTransform.rect.width;
+        panelImage.enabled = false;
     }
 
     private void EnemySpawner_OnSpawnFrequencyChanged(object sender, int frequency)
     {
-        text.text = WARNING_MESSAGE + $" (Ticks between enemies = {frequency})";
-        text.rectTransform.position = new Vector3(
-               text.rectTransform.position.x + text.rectTransform.rect.width,
-               text.rectTransform.position.y,
-               text.rectTransform.position.z);
+        panelImage.enabled = true;
+        text.text = WARNING_MESSAGE + $" (TBE = {frequency})"; //For debug purposes
+        text.rectTransform.localPosition = new Vector3(
+               text.rectTransform.rect.width, //places it just outside the right side of the screen
+               text.rectTransform.localPosition.y,
+               text.rectTransform.localPosition.z);
     }
 
     void Update()
     {
-        //hardcoding some values here, but for better performance I'd perhaps use a coroutine
+        if (text.rectTransform.localPosition.x > outOfScreenThreshold)
+        {
+            text.rectTransform.localPosition = new Vector3(
+                text.rectTransform.localPosition.x - Time.deltaTime * messageSpeed,
+                text.rectTransform.localPosition.y,
+                text.rectTransform.localPosition.z);
+        }
+        else
+        {
+            panelImage.enabled = false;
+        }
+    }
 
-        //if (text.rectTransform.position.y < outOfScreenThreshold)
-        //{
-        //    text.rectTransform.position = new Vector3(
-        //        text.rectTransform.position.x - Time.deltaTime * messageSpeed,
-        //        text.rectTransform.position.y,
-        //        text.rectTransform.position.z);
-        //}
+    private void OnDestroy()
+    {
+        EnemySpawner.SpawnFrequencyChanged -= EnemySpawner_OnSpawnFrequencyChanged;
     }
 }

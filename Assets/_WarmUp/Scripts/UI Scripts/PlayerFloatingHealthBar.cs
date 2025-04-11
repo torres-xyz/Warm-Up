@@ -25,4 +25,9 @@ public class PlayerFloatingHealthBar : MonoBehaviour
     {
         rectTransform.position = target.position + Vector3.up * height;
     }
+
+    private void OnDestroy()
+    {
+        PlayerController.HealthChanged -= PlayerController_OnLifeChanged;
+    }
 }

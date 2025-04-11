@@ -12,7 +12,7 @@ public class EnemySpawner : MonoBehaviour
 
     [SerializeField] private Enemy enemyPrefab;
     [SerializeField] private int amountOfSpawnsUntilFrequencyIncrease = 5;
-    [SerializeField] private int initialSpawnFrequency = 8;
+    [SerializeField] private int ticksBetweenSpawns = 8;
     [SerializeField] private Transform spawnLocation;
     private int ticksSinceLastSpawn;
 
@@ -24,7 +24,7 @@ public class EnemySpawner : MonoBehaviour
     void Start()
     {
         GameManager.TimeTicked += GameManager_OnTimeTicked;
-        SpawnFrequency = initialSpawnFrequency;
+        spawnFrequency = ticksBetweenSpawns; //setting it directly as not to trigger the UI event
     }
 
     private void GameManager_OnTimeTicked(object sender, System.EventArgs e)
@@ -62,4 +62,8 @@ public class EnemySpawner : MonoBehaviour
         SpawnFrequencyChanged?.Invoke(this, value);
     }
 
+    private void OnDestroy()
+    {
+        GameManager.TimeTicked -= GameManager_OnTimeTicked;
+    }
 }

@@ -6,7 +6,9 @@ public class Enemy : MonoBehaviour
 {
     public event EventHandler<int> HealthChanged;
     public event EventHandler<Vector3> PositionChanged;
-    public event EventHandler EnemyKilled;
+    public event EventHandler WasKilled;
+
+    public static event EventHandler AnEnemyWasKilled;
 
 
     public int AttackDamage { get => attackDamage; private set => attackDamage = value; }
@@ -47,7 +49,8 @@ public class Enemy : MonoBehaviour
 
     private void Death()
     {
-        EnemyKilled?.Invoke(this, EventArgs.Empty);
+        WasKilled?.Invoke(this, EventArgs.Empty);
+        AnEnemyWasKilled?.Invoke(this, EventArgs.Empty);
         Destroy(gameObject);
     }
 

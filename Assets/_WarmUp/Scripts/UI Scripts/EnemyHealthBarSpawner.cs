@@ -18,4 +18,9 @@ public class EnemyHealthBarSpawner : MonoBehaviour
         healthBar.transform.SetParent(healthBarsHolder.transform);
         healthBar.SetTarget(newEnemy, healthBarHeight);
     }
+
+    private void OnDestroy()
+    {
+        EnemySpawner.EnemySpawned -= EnemySpawner_OnEnemySpawned;
+    }
 }

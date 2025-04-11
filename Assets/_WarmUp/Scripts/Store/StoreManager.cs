@@ -46,10 +46,16 @@ public class StoreManager : MonoBehaviour
         itemsInStoreCount++;
 
         //TODO - Replace magic numbers
-        int price = UnityEngine.Random.Range(5, 21); //5 - 20
+        int price = UnityEngine.Random.Range(2, 11); //1 - 10
         int increment = UnityEngine.Random.Range(1, 5); //1 - 4
         int itemType = UnityEngine.Random.Range(0, Enum.GetNames(typeof(StoreItemType)).Length);
 
         newStoreItem.SetupItem(price, increment, (StoreItemType)itemType);
+    }
+
+    private void OnDestroy()
+    {
+        GameManager.TimeTicked -= GameManager_OnTimeTicked;
+        StoreItem.StoreItemBoughtAndDestroyed -= StoreItem_OnStoreItemBoughtAndDestroyed;
     }
 }

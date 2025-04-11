@@ -6,7 +6,7 @@ public class HealthText : MonoBehaviour
     TMP_Text text;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         text = GetComponent<TMP_Text>();
         PlayerController.HealthChanged += PlayerController_OnLifeChanged;
@@ -17,8 +17,8 @@ public class HealthText : MonoBehaviour
         text.text = $"{life}%";
     }
 
-    private void GameManager_OnCoinAmountChanged(object sender, int coinAmount)
+    private void OnDestroy()
     {
-        text.text = coinAmount.ToString();
+        PlayerController.HealthChanged -= PlayerController_OnLifeChanged;
     }
 }
