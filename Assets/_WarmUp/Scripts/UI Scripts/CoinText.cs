@@ -9,10 +9,10 @@ public class CoinText : MonoBehaviour
     void Start()
     {
         text = GetComponent<TMP_Text>();
-        GameManager.CoinAmountChanged += GameManager_OnCoinAmountChanged;
+        PlayerController.MoneyChanged += PlayerController_OnMoneyChanged; ;
     }
 
-    private void GameManager_OnCoinAmountChanged(object sender, int coinAmount)
+    private void PlayerController_OnMoneyChanged(object sender, int coinAmount)
     {
         text.text = coinAmount.ToString();
     }

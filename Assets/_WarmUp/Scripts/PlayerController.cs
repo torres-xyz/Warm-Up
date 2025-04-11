@@ -4,13 +4,13 @@ using UnityEngine.AI;
 
 public class PlayerController : MonoBehaviour
 {
-    public static event EventHandler CoinCaught;
-    public static event EventHandler ChestOpened;
     public static event EventHandler EnemyTouched;
     public static event EventHandler<int> HealthChanged;
+    public static event EventHandler<int> AttackDamageChanged;
+    public static event EventHandler<int> MoneyChanged;
 
     [SerializeField] private float movementSpeed;
-    [SerializeField] private int attackDamage;
+    [SerializeField] private int startingAttackDamage = 20;
     private NavMeshAgent navMeshAgent;
 
     private Camera mainCam;
@@ -19,14 +19,22 @@ public class PlayerController : MonoBehaviour
     const string CHEST_TAG = "Chest";
     const string ENEMY_TAG = "Enemy";
     const string CHALICE_TAG = "Chalice";
+    const string TRAINING_STATUE_TAG = "TrainingStatue";
 
     private int maxHealth = 100;
-    private int playerHealth;
+    public int Health { get => health; private set => SetHealth(value); }
+    public int AttackDamage { get => attackDamage; private set => SetAttackDamage(value); }
+    public int Money { get => money; private set => SetMoney(value); }
 
 
-    float timeSinceLastTick;
-    bool justTicked;
+    private int money;
+    private int health;
+    private int attackDamage;
+
     SphereCollider sphereCollider;
+
+
+
 
     void Start()
     {
@@ -34,16 +42,16 @@ public class PlayerController : MonoBehaviour
         navMeshAgent = GetComponent<NavMeshAgent>();
         sphereCollider = GetComponent<SphereCollider>();
 
-        playerHealth = 100;
+        Health = maxHealth;
+        AttackDamage = startingAttackDamage;
 
         GameManager.TimeTicked += GameManager_OnTimeTicked;
+
+
     }
 
     private void GameManager_OnTimeTicked(object sender, EventArgs e)
     {
-        justTicked = true;
-        Debug.Log($"Time Ticked");
-
         Collider[] hitColliders = Physics.OverlapSphere(transform.position + sphereCollider.center,
                                                         sphereCollider.radius);
         foreach (Collider hitCollider in hitColliders)
@@ -53,7 +61,7 @@ public class PlayerController : MonoBehaviour
                 Enemy touchedEnemy = hitCollider.gameObject.GetComponent<Enemy>();
 
                 ReceiveDamage(touchedEnemy.AttackDamage);
-                DealDamage(touchedEnemy, attackDamage);
+                DealDamage(touchedEnemy, AttackDamage);
             }
             if (hitCollider.gameObject.CompareTag(CHEST_TAG))
             {
@@ -63,18 +71,30 @@ public class PlayerController : MonoBehaviour
             {
                 ReceiveHealing();
             }
+            if (hitCollider.gameObject.CompareTag(TRAINING_STATUE_TAG))
+            {
+                if (Money >= GameManager.trainingCost)
+                {
+                    Money -= GameManager.trainingCost;
+                    ReceiveTraining(); //Increase Attack Damage
+                }
+            }
         }
+    }
+
+    private void ReceiveTraining()
+    {
+        AttackDamage += GameManager.trainingStatueTrainingAmount;
     }
 
     private void ReceiveHealing()
     {
-        playerHealth = Math.Min(maxHealth, playerHealth + GameManager.chaliceHealingAmount);
-        HealthChanged?.Invoke(this, playerHealth);
+        Health = Math.Min(maxHealth, Health + GameManager.chaliceHealingAmount);
     }
 
     private void OpenChest()
     {
-        ChestOpened?.Invoke(this, EventArgs.Empty);
+        Money += GameManager.chestCoinValue;
     }
 
     private void DealDamage(Enemy touchedEnemy, int attackDamage)
@@ -84,13 +104,12 @@ public class PlayerController : MonoBehaviour
 
     private void ReceiveDamage(int attackDamage)
     {
-        playerHealth -= attackDamage;
-        if (playerHealth <= 0)
+        Health -= attackDamage;
+        if (Health <= 0)
         {
-            playerHealth = 0;
+            Health = 0;
             PlayerDied();
         }
-        HealthChanged?.Invoke(this, playerHealth);
     }
 
     private void PlayerDied()
@@ -121,7 +140,7 @@ public class PlayerController : MonoBehaviour
 
     private void TouchedCoin(GameObject coin)
     {
-        CoinCaught?.Invoke(this, EventArgs.Empty);
+        Money++;
         Destroy(coin); //Manage this better later
     }
 
@@ -133,5 +152,22 @@ public class PlayerController : MonoBehaviour
         {
             navMeshAgent.SetDestination(hit.point);
         }
+    }
+
+    //Setters
+    private void SetHealth(int value)
+    {
+        health = value;
+        HealthChanged?.Invoke(this, health);
+    }
+    private void SetAttackDamage(int value)
+    {
+        attackDamage = value;
+        AttackDamageChanged?.Invoke(this, attackDamage);
+    }
+    private void SetMoney(int value)
+    {
+        money = value;
+        MoneyChanged?.Invoke(this, money);
     }
 }

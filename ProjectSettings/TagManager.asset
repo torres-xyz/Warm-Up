@@ -8,6 +8,7 @@ TagManager:
   - Chest
   - Enemy
   - Chalice
+  - TrainingStatue
   layers:
   - Default
   - TransparentFX
