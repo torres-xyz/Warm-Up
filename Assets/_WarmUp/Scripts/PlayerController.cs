@@ -19,7 +19,7 @@ public class PlayerController : MonoBehaviour
     const string ENEMY_TAG = "Enemy";
     const string CHALICE_TAG = "Chalice";
 
-    private int MaxPlayerHealth = 100;
+    private int maxHealth = 100;
     private int playerHealth;
 
     int attackDamage;
@@ -72,7 +72,7 @@ public class PlayerController : MonoBehaviour
 
     private void ReceiveHealing()
     {
-        playerHealth = Math.Min(MaxPlayerHealth, playerHealth + GameManager.chaliceHealingAmount);
+        playerHealth = Math.Min(maxHealth, playerHealth + GameManager.chaliceHealingAmount);
         HealthChanged?.Invoke(this, playerHealth);
     }
 
