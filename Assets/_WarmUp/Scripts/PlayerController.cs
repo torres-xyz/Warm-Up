@@ -39,13 +39,17 @@ public class PlayerController : MonoBehaviour
         navMeshAgent = GetComponent<NavMeshAgent>();
         sphereCollider = GetComponent<SphereCollider>();
 
+        //Reset stats, so that the UI also gets updated
+        Money = 0;
         Health = maxHealth;
         AttackDamage = startingAttackDamage;
 
         GameManager.TimeTicked += GameManager_OnTimeTicked;
 
-
+        StoreItem.AttackDamageIncreasedByStoreItem += StoreItem_OnAttackDamageIncreasedByStoreItem;
     }
+
+
 
     private void GameManager_OnTimeTicked(object sender, EventArgs e)
     {
@@ -81,17 +85,17 @@ public class PlayerController : MonoBehaviour
 
     private void ReceiveTraining()
     {
-        AttackDamage += GameManager.trainingStatueTrainingAmount;
+        AttackDamage += GameManager.TrainingStatueReward;
     }
 
     private void ReceiveHealing()
     {
-        Health = Math.Min(maxHealth, Health + GameManager.chaliceHealingAmount);
+        Health = Math.Min(maxHealth, Health + GameManager.ChaliceReward);
     }
 
     private void OpenChest()
     {
-        Money += GameManager.chestCoinValue;
+        Money += GameManager.ChestReward;
     }
 
     private void DealDamage(Enemy touchedEnemy, int attackDamage)
@@ -114,7 +118,10 @@ public class PlayerController : MonoBehaviour
         Debug.Log($"Player Died");
     }
 
-
+    public void SubtractMoney(int amount)
+    {
+        Money -= amount;
+    }
 
     // Update is called once per frame
     void Update()
@@ -151,7 +158,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    //Setters
+    #region Setters
     private void SetHealth(int value)
     {
         health = value;
@@ -167,4 +174,12 @@ public class PlayerController : MonoBehaviour
         money = value;
         MoneyChanged?.Invoke(this, money);
     }
+    #endregion
+
+    #region StoreItemListeners
+    private void StoreItem_OnAttackDamageIncreasedByStoreItem(object sender, int e)
+    {
+        AttackDamage += e;
+    }
+    #endregion
 }

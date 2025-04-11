@@ -21,6 +21,12 @@ public class StoreManager : MonoBehaviour
     {
         itemsInStoreCount = 0;
         GameManager.TimeTicked += GameManager_OnTimeTicked;
+        StoreItem.StoreItemBoughtAndDestroyed += StoreItem_OnStoreItemBoughtAndDestroyed;
+    }
+
+    private void StoreItem_OnStoreItemBoughtAndDestroyed(object sender, EventArgs e)
+    {
+        itemsInStoreCount = Math.Max(0, itemsInStoreCount - 1);
     }
 
     private void GameManager_OnTimeTicked(object sender, System.EventArgs e)

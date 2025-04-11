@@ -5,7 +5,6 @@ public class AttackDamageText : MonoBehaviour
 {
     TMP_Text text;
 
-    // Start is called before the first frame update
     void Start()
     {
         text = GetComponent<TMP_Text>();
