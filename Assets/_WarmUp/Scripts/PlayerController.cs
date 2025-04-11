@@ -1,6 +1,8 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.EventSystems;
 
 public class PlayerController : MonoBehaviour
 {
@@ -126,7 +128,7 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) && !IsPointerOverUIObject())
         {
             SetDestinationToMousePosition();
         }
@@ -156,6 +158,20 @@ public class PlayerController : MonoBehaviour
         {
             navMeshAgent.SetDestination(hit.point);
         }
+    }
+
+
+    //Quick and dirty solution from SO - https://stackoverflow.com/questions/52064801/unity-raycasts-going-through-ui
+    private bool IsPointerOverUIObject()
+    {
+        PointerEventData eventDataCurrentPosition = new(EventSystem.current)
+        {
+            position = new Vector2(Input.mousePosition.x, Input.mousePosition.y)
+        };
+
+        List<RaycastResult> results = new();
+        EventSystem.current.RaycastAll(eventDataCurrentPosition, results);
+        return results.Count > 0;
     }
 
     #region Setters
