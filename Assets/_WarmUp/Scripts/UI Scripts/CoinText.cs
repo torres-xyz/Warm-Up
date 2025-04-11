@@ -12,8 +12,8 @@ public class CoinText : MonoBehaviour
         GameManager.CoinAmountChanged += GameManager_OnCoinAmountChanged;
     }
 
-    private void GameManager_OnCoinAmountChanged(object sender, int cointAmount)
+    private void GameManager_OnCoinAmountChanged(object sender, int coinAmount)
     {
-        text.text = cointAmount.ToString();
+        text.text = coinAmount.ToString();
     }
 }

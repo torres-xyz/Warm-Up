@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 6814902297639304543}
   - component: {fileID: 5977351689343539902}
   m_Layer: 0
-  m_Name: Trophy
+  m_Name: Chalice
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
